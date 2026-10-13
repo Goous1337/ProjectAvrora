@@ -1,0 +1,30 @@
+package tests;
+
+import core.BaseTest;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DisplayName("DemoQA BookStore API")
+class BookStoreApiTest extends BaseTest {
+
+    @Test
+    @DisplayName("GET /BookStore/v1/Books returns non-empty list")
+    void getBooks() {
+        Response response = client.getBooks();
+
+        assertThat(response.statusCode())
+                .as("Status code should be 200")
+                .isEqualTo(200);
+
+        List<String> titles = response.jsonPath().getList("books.title");
+
+        assertThat(titles)
+                .as("Books list should not be empty")
+                .isNotEmpty();
+    }
+}
