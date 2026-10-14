@@ -25,4 +25,9 @@ public class DemoQaClient {
     public Response getBooks() {
         return given(spec).get("/BookStore/v1/Books");
     }
+
+    public Response getBook(String isbn){
+        return given(spec).queryParam("ISBN", isbn).get("/BookStore/v1/Book");
+    }
+
 }

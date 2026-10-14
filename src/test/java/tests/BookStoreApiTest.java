@@ -27,4 +27,21 @@ class BookStoreApiTest extends BaseTest {
                 .as("Books list should not be empty")
                 .isNotEmpty();
     }
+
+    @Test
+    @DisplayName("GET /BookStore/v1/Book returns book by ISBN")
+    void getBookByIsbn() {
+        String isbn = "9781449325862";
+        Response response = client.getBook(isbn);
+
+        assertThat(response.statusCode())
+                .as("Status code should be 200")
+                .isEqualTo(200);
+
+        String actualIsbn = response.jsonPath().getString("isbn");
+
+        assertThat(actualIsbn)
+                .as("ISBN should match the requested one")
+                .isEqualTo(isbn);
+    }
 }
