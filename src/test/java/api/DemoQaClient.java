@@ -5,6 +5,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 public class DemoQaClient {
@@ -26,8 +28,17 @@ public class DemoQaClient {
         return given(spec).get("/BookStore/v1/Books");
     }
 
-    public Response getBook(String isbn){
+    public Response getBook(String isbn) {
         return given(spec).queryParam("ISBN", isbn).get("/BookStore/v1/Book");
     }
 
+
+    public Response createUser(String userName, String password) {
+        Map<String, String> body = Map.of("userName", userName,
+                "password", password);
+
+        return given(spec)
+                .body(body)
+                .post("/Account/v1/User");
+    }
 }

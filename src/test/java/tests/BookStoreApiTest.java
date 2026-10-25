@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("DemoQA BookStore API")
 class BookStoreApiTest extends BaseTest {
 
+    private static final String VALID_PASSWORD = "Test@1234";
+
+
     @Test
     @DisplayName("GET /BookStore/v1/Books returns non-empty list")
     void getBooks() {
@@ -43,5 +46,29 @@ class BookStoreApiTest extends BaseTest {
         assertThat(actualIsbn)
                 .as("ISBN should match the requested one")
                 .isEqualTo(isbn);
+    }
+
+    @Test
+    @DisplayName("POST /Account/v1/User creates a new user")
+    void postCreateUser() {
+        String username = "user_" + System.currentTimeMillis();
+
+        Response response = client.createUser(username, VALID_PASSWORD);
+        //response.prettyPrint();
+
+        assertThat(response.statusCode())
+                .as("Status code should be 201")
+                .isEqualTo(201);
+
+        String userId = response.jsonPath().getString("userID");
+        assertThat(userId)
+                .as("Generated userId should not be blank")
+                .isNotBlank();
+
+        String actualUsername = response.jsonPath().getString("username");
+        assertThat(actualUsername)
+                .as("Username should match the requested one")
+                .isEqualTo(username);
+
     }
 }
