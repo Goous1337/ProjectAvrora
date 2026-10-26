@@ -8,6 +8,7 @@ import io.restassured.specification.RequestSpecification;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.patch;
 
 public class DemoQaClient {
 
@@ -25,11 +26,13 @@ public class DemoQaClient {
     }
 
     public Response getBooks() {
-        return given(spec).get("/BookStore/v1/Books");
+        return given(spec)
+                .get("/BookStore/v1/Books");
     }
 
     public Response getBook(String isbn) {
-        return given(spec).queryParam("ISBN", isbn).get("/BookStore/v1/Book");
+        return given(spec).queryParam("ISBN", isbn)
+                .get("/BookStore/v1/Book");
     }
 
 
@@ -49,6 +52,13 @@ public class DemoQaClient {
         return given(spec)
                 .body(body)
                 .post("/Account/v1/GenerateToken");
+    }
+
+    public Response getUser(String userId, String token){
+        return given(spec)
+                .pathParam("uuid", userId)
+                .header("Authorization", "Bearer " + token)
+                .get("/Account/v1/User/{uuid}");
     }
 
 }
