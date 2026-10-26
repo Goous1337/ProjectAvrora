@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookStoreApiTest extends BaseTest {
 
     private static final String VALID_PASSWORD = "Test@1234";
+    private static final String VALID_SUCCESSFUL = "Success";
 
 
     @Test
@@ -70,5 +71,29 @@ class BookStoreApiTest extends BaseTest {
                 .as("Username should match the requested one")
                 .isEqualTo(username);
 
+    }
+
+    @Test
+    @DisplayName("POST /Account/v1/GenerateToken get token user")
+    void postGenerateToken() {
+
+        String username = "user_" + System.currentTimeMillis();
+        client.createUser(username, VALID_PASSWORD);
+
+        Response response = client.getGenerateToken(username, VALID_PASSWORD);
+        response.prettyPrint();
+        assertThat(response.statusCode())
+                .as("Status code should be 200")
+                .isEqualTo(200);
+
+        String token = response.jsonPath().getString("token");
+        assertThat(token)
+                .as("get token should not be blank")
+                .isNotBlank();
+
+        String status = response.jsonPath().getString("status");
+        assertThat(status)
+                .as("Verify successful token generation")
+                .isEqualTo(VALID_SUCCESSFUL);
     }
 }

@@ -41,4 +41,14 @@ public class DemoQaClient {
                 .body(body)
                 .post("/Account/v1/User");
     }
+
+    public Response getGenerateToken(String userName, String password) {
+        Map<String, String> body = Map.of("userName", userName,
+                "password", password);
+
+        return given(spec)
+                .body(body)
+                .post("/Account/v1/GenerateToken");
+    }
+
 }
