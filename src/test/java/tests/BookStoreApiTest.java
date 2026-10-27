@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DemoQA BookStore API")
@@ -95,5 +96,36 @@ class BookStoreApiTest extends BaseTest {
         assertThat(status)
                 .as("Verify successful token generation")
                 .isEqualTo(VALID_SUCCESSFUL);
+    }
+
+    @Test
+    @DisplayName("GET /Account/v1/User/{uuid} returns user by id")
+    void getUserById() {
+
+        String username = "user_" + System.currentTimeMillis();
+        Response createResponse = client.createUser(username, VALID_PASSWORD);
+        String userId = createResponse.jsonPath().getString("userID");
+
+        Response tokenResponse = client.getGenerateToken(username, VALID_PASSWORD);
+        String token = tokenResponse.jsonPath().getString("token");
+        assertThat(token)
+                .as("get token should not be blank")
+                .isNotBlank();
+
+        Response response = client.getUser(userId, token);
+        response.prettyPrint();
+        assertThat(response.statusCode())
+                .as("Status code should be 200")
+                .isEqualTo(200);
+
+        String actualUserId = response.jsonPath().getString("userId");
+        assertThat(actualUserId)
+                .as("Returned userID should match")
+                .isEqualTo(userId);
+
+        String actualUsername = response.jsonPath().getString("username");
+        assertThat(actualUsername)
+                .as("Returned username should match")
+                .isEqualTo(username);
     }
 }

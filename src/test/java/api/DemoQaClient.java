@@ -61,4 +61,10 @@ public class DemoQaClient {
                 .get("/Account/v1/User/{uuid}");
     }
 
+    public Response deleteUser(String userId){
+        return given(spec)
+                .pathParams("uuid", userId)
+                .delete("/Account/v1/User/{uuid}");
+    }
+
 }
