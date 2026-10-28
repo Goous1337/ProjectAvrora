@@ -54,16 +54,17 @@ public class DemoQaClient {
                 .post("/Account/v1/GenerateToken");
     }
 
-    public Response getUser(String userId, String token){
+    public Response getUser(String userId, String token) {
         return given(spec)
                 .pathParam("uuid", userId)
                 .header("Authorization", "Bearer " + token)
                 .get("/Account/v1/User/{uuid}");
     }
 
-    public Response deleteUser(String userId){
+    public Response deleteUser(String userId, String token) {
         return given(spec)
                 .pathParams("uuid", userId)
+                .header("Authorization", "Bearer " + token)
                 .delete("/Account/v1/User/{uuid}");
     }
 

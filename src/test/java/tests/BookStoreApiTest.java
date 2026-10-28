@@ -128,4 +128,30 @@ class BookStoreApiTest extends BaseTest {
                 .as("Returned username should match")
                 .isEqualTo(username);
     }
+
+    @Test
+    @DisplayName("DELETE /Account/v1/User/{uuid} returns delete user by userId")
+    void deleteUserByUserId() {
+
+        String username = "user_" + System.currentTimeMillis();
+        Response createResponse = client.createUser(username, VALID_PASSWORD);
+        createResponse.prettyPrint();
+        String userId = createResponse.jsonPath().getString("userID");
+
+        Response tokenResponse = client.getGenerateToken(username, VALID_PASSWORD);
+        String token = tokenResponse.jsonPath().getString("token");
+        assertThat(token)
+                .as("get token should not be blank")
+                .isNotBlank();
+
+        Response deleteResponse = client.deleteUser(userId, token);
+        assertThat(deleteResponse.statusCode())
+                .as("Status code should be 204")
+                .isEqualTo(204);
+
+        Response getAfterDelete = client.getUser(userId, token);
+        assertThat(getAfterDelete.statusCode())
+                .as("User should be deleted, so status should be 401 or 404")
+                .isIn(401, 404);
+    }
 }
