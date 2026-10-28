@@ -1,33 +1,27 @@
 package tests;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import core.BaseUiTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import ui.TextBoxPage;
 
-public class TextBoxUiTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private Playwright playwright;
-    private Browser browser;
-    private Page page;
+public class TextBoxUiTest extends BaseUiTest {
 
-    @BeforeEach
-    void setUp(){
-        playwright = Playwright.create();
+    @Test
+    @DisplayName("Fill Text Box form and verify output")
+    void fillTextBoxForm() {
+        TextBoxPage textBoxPage = new TextBoxPage(page);
 
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+        textBoxPage.open();
 
-        page = browser.newPage();
+        textBoxPage.fillFullName("Ivan Ivanov");
+        textBoxPage.fillEmail("ivan@test.com");
+
+        textBoxPage.clickSubmit();
+
+        String output = textBoxPage.getOutputText();
+        assertThat(output).contains("Ivan Ivanov");
     }
-
-    @AfterEach
-    void teatDown() {
-
-        browser.close();
-        playwright.close();
-
-    }
-
 }
