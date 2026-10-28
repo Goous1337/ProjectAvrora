@@ -1,14 +1,17 @@
 package core;
 
-import api.DemoQaClient;
+import api.clients.AccountClient;
+import api.clients.BookClient;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class BaseTest {
 
-    protected DemoQaClient client;
+        protected BookClient bookClient;
+        protected AccountClient accountClient;
 
-    @BeforeEach
-    void setUpBase() {
-        client = new DemoQaClient();
-    }
+        @BeforeEach
+        void setUpBase() {
+            bookClient = new BookClient();
+            accountClient = new AccountClient();
+        }
 }
