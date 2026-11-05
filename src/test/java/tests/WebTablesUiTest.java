@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ui.WebTablesPage;
 import utils.RandomDataGenerator;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WebTablesUiTest extends BaseUiTest {
@@ -14,13 +15,10 @@ public class WebTablesUiTest extends BaseUiTest {
     void fillWebTables() {
         WebTablesPage webTablesPage = new WebTablesPage(page);
 
-        // 1. Открываем страницу
         webTablesPage.open();
 
-        // 2. Нажимаем "Add" (метод уже есть в Page Object)
         webTablesPage.clickAddButton();
 
-        // 3. Генерируем данные (через наш RandomDataGenerator)
         String firstName = RandomDataGenerator.getFirstName();
         String lastName = RandomDataGenerator.getLastName();
         String email = RandomDataGenerator.getEmail();
@@ -28,7 +26,6 @@ public class WebTablesUiTest extends BaseUiTest {
         String salary = String.valueOf(RandomDataGenerator.getSalary());
         String department = RandomDataGenerator.getDepartment();
 
-        // 4. Заполняем форму (используй методы из Page Object)
         webTablesPage.fillFirstName(firstName);
         webTablesPage.fillLastName(lastName);
         webTablesPage.fillEmail(email);
@@ -36,10 +33,9 @@ public class WebTablesUiTest extends BaseUiTest {
         webTablesPage.fillSalary(salary);
         webTablesPage.fillDepartment(department);
 
-        // 5. Нажимаем Submit
         webTablesPage.clickSubmit();
 
-        String tableText = page.locator(".table").innerText(); // <-- убедись, что селектор правильный!
+        String tableText = page.locator(".table").innerText();
         assertThat(tableText)
                 .as("Table should contain the new user email")
                 .contains(email);

@@ -15,15 +15,12 @@ public class CheckboxPage {
     }
 
     public void clickHomeCheckbox() {
-        // Ищем чекбокс по роли и имени "Home" и ставим галочку
         page.getByRole(AriaRole.CHECKBOX,
                 new Page.GetByRoleOptions().setName("Home")
         ).check();
     }
 
-    // Метод для получения текста результата
     public String getResultText() {
-        // В Playwright текст блока достается через .textContent() или .innerText()
         return page.locator("#result").textContent();
     }
 }
